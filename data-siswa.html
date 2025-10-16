@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Siswa BCMPK'20</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background: rgb(110, 1, 1);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        /* PERUBAHAN: Container untuk logo berdekatan */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            display: flex;
+            transition: all 0.3s ease;
+        }
+
+        .logo img {
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+
+        .header.scrolled .logo {
+            color: #2c3e50;
+            text-shadow: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .header.scrolled .nav-link {
+            color: #2c3e50;
+            text-shadow: none;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #ffffff, #e74c3c);
+            transition: width 0.3s ease;
+        }
+
+        .header.scrolled .nav-link::after {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: #e74c3c;
+            transform: translateY(-2px);
+        }
+
+        .header.scrolled .nav-link:hover {
+            color: #3498db;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .header.scrolled .mobile-menu-toggle {
+            color: #dd463c;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #1a2a6c, #b21f1f, #fdbb2d);
+        }
+
+        .data-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .data-header h1 {
+            color:  #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .data-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .note {
+            background-color: #fff9e6;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+            border-left: 4px solid #fdbb2d;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(26, 42, 108, 0.3);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(26, 42, 108, 0.4);
+        }
+
+        .back-btn i {
+            margin-right: 8px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                padding-top: 2rem;
+                transition: left 0.3s ease;
+                border-top: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-menu .nav-link {
+                color: #2c3e50;
+                text-shadow: none;
+                font-size: 1.2rem;
+                padding: 1rem 0;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .logo-container {
+                gap: 5px;
+            }
+            
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+
+            th, td {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 20px;
+                margin: 80px auto 30px;
+            }
+
+            .data-header h1 {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            th, td {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .data-header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <!-- PERUBAHAN: Container untuk logo berdekatan -->
+            <div class="logo-container">
+                <a href="#" class="logo"><img src="Image/Sman2.png" width="50" height="50" alt="Logo SMAN 2"></a>
+                <a href="#" class="logo"><img src="Image/MPK2.png" width="60" height="56" alt="Logo MPK"></a>
+            </div>
+            <nav> 
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="Beranda.html" class="nav-link">Beranda</a></li>
+                    <li><a href="Tentang Kami.html" class="nav-link">Tentang Kami</a></li>
+                    <li><a href="Informasi.html" class="nav-link">Informasi</a></li>
+                    <li><a href="Pengumuman.html" class="nav-link">Pengumuman</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="data-header">
+            <h1><i class="fas fa-table"></i> Data Siswa BCMPK'20</h1>
+            <p>Berikut adalah data nama dan NIS siswa BCMPK'20</p>
+        </div>
+        
+        <table id="studentsTable">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>NIS</th>
+                    <th>Nama</th>
+                    <th>Kelas</th>
+                    <!-- Kolom Status dihilangkan -->
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data akan diisi oleh JavaScript -->
+            </tbody>
+        </table>
+
+        <a href="Pengumuman.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Kembali ke Halaman Sebelumnya
+        </a>
+    </div>
+
+    <script>
+        // Data siswa dari file Excel
+        const studentData = [
+            { no: 1, nis: "25173", name: "Aini Nur Marifah", class: "X-1", status: "LOLOS" },
+            { no: 2, nis: "25177", name: "Bonifasius Dimas Martin", class: "X-1", status: "LOLOS" },
+            { no: 3, nis: "25183", name: "Hasna Shiella Nur Hafidzah", class: "X-1", status: "LOLOS" },
+            { no: 4, nis: "25186", name: "Muhammad Revan Ramadhani Nuris", class: "X-1", status: "LOLOS" },
+            { no: 5, nis: "25193", name: "Raden Jagadhita Citrvwijaya", class: "X-1", status: "TIDAK LOLOS" },
+            { no: 6, nis: "25199", name: "Rulif Audris Dzulfiqar", class: "X-1", status: "TIDAK LOLOS" },
+            { no: 7, nis: "25204", name: "Yasmin Farah Ailatu Wiam", class: "X-1", status: "TIDAK LOLOS" },
+            { no: 8, nis: "25213", name: "Betari Lylafazya Ambalika", class: "X-2", status: "LOLOS" },
+            { no: 9, nis: "25214", name: "Damar Putra Aufar", class: "X-2", status: "LOLOS" },
+            { no: 10, nis: "25215", name: "Deka Afrianto", class: "X-2", status: "TIDAK LOLOS" },
+            { no: 11, nis: "25216", name: "Desta Bagus Pratama", class: "X-2", status: "LOLOS" },
+            { no: 12, nis: "25226", name: "Fidhel Augusta Fadhilah", class: "X-2", status: "TIDAK LOLOS" },
+            { no: 13, nis: "25231", name: "Kyran Aqila Lida", class: "X-2", status: "LOLOS" },
+            { no: 14, nis: "25235", name: "Merliyan Balqis Aquino", class: "X-2", status: "TIDAK LOLOS" },
+            { no: 15, nis: "25237", name: "Nabil Adwa Putra", class: "X-2", status: "TIDAK LOLOS" },
+            { no: 16, nis: "25246", name: "Aisha Hana Naira", class: "X-3", status: "TIDAK LOLOS" },
+            { no: 17, nis: "25248", name: "Almira Alycia Nasywa", class: "X-3", status: "LOLOS" },
+            { no: 18, nis: "25249", name: "Alyya Azka Sarifah", class: "X-3", status: "LOLOS" },
+            { no: 19, nis: "25250", name: "Angelina Devin Suntoro", class: "X-3", status: "LOLOS" },
+            { no: 20, nis: "25253", name: "Avisa Marva Athaya", class: "X-3", status: "TIDAK LOLOS" },
+            { no: 21, nis: "25255", name: "Bilqis Ihdaa Ni'amii", class: "X-3", status: "LOLOS" },
+            { no: 22, nis: "25274", name: "Safira Asari Eka Putri", class: "X-3", status: "TIDAK LOLOS" },
+            { no: 23, nis: "25279", name: "Zalfa Muna Azizah", class: "X-3", status: "TIDAK LOLOS" },
+            { no: 24, nis: "25287", name: "Ardhitya Bagus Aji Saputra", class: "X-4", status: "TIDAK LOLOS" },
+            { no: 25, nis: "25294", name: "Edra Dzaka Andes", class: "X-4", status: "TIDAK LOLOS" },
+            { no: 26, nis: "25297", name: "Harits Anandra Prabhaswara", class: "X-4", status: "TIDAK LOLOS" },
+            { no: 27, nis: "25298", name: "Hasna Ferian Saffura", class: "X-4", status: "TIDAK LOLOS" },
+            { no: 28, nis: "25305", name: "Mikhael Oktaviano Mardiana", class: "X-4", status: "TIDAK LOLOS" },
+            { no: 29, nis: "25307", name: "Nur Fauzi", class: "X-4", status: "TIDAK LOLOS" },
+            { no: 30, nis: "25310", name: "Rajbani Abdillah", class: "X-4", status: "LOLOS" },
+            { no: 31, nis: "25316", name: "Alauddin Suko Ramatory", class: "X-5", status: "TIDAK LOLOS" },
+            { no: 32, nis: "25335", name: "Maritza Almira Khansa Giva Maraville", class: "X-5", status: "TIDAK LOLOS" },
+            { no: 33, nis: "25334", name: "Mada Putra Sandiyudha", class: "X-5", status: "TIDAK LOLOS" },
+            { no: 34, nis: "25336", name: "Muhammad Davine Aydin Elfreda", class: "X-5", status: "LOLOS" },
+            { no: 35, nis: "25337", name: "Mukti Dini Junaedi", class: "X-5", status: "TIDAK LOLOS" },
+            { no: 36, nis: "25338", name: "Nanang Tri Satrio", class: "X-5", status: "TIDAK LOLOS" },
+            { no: 37, nis: "25347", name: "Shiva Bimbim Gimnastyar", class: "X-5", status: "TIDAK LOLOS" },
+            { no: 38, nis: "25358", name: "Cessa Cahaya Rahmadhani", class: "X-6", status: "TIDAK LOLOS" },
+            { no: 39, nis: "25367", name: "Husna Dwi Khairunnisa", class: "X-6", status: "TIDAK LOLOS" },
+            { no: 40, nis: "25372", name: "Muhammad Fitzal Asfa Musakfar", class: "X-6", status: "TIDAK LOLOS" },
+            { no: 41, nis: "25378", name: "Noraya Aquilla", class: "X-6", status: "TIDAK LOLOS" },
+            { no: 42, nis: "25381", name: "Raisya Asadyl Azhar", class: "X-6", status: "TIDAK LOLOS" },
+            { no: 43, nis: "25384", name: "Saskia Dwi Ananta", class: "X-6", status: "LOLOS" },
+            { no: 44, nis: "25385", name: "Syifana Amalia Zahra", class: "X-6", status: "LOLOS" },
+            { no: 45, nis: "25386", name: "Ahmad Rifai", class: "X-7", status: "TIDAK LOLOS" },
+            { no: 46, nis: "25395", name: "Charles Rajendra Elvaretta", class: "X-7", status: "TIDAK LOLOS" },
+            { no: 47, nis: "25396", name: "Chigra Apta Nirbhaya", class: "X-7", status: "LOLOS" },
+            { no: 48, nis: "25397", name: "Danish Fairuz Elang", class: "X-7", status: "TIDAK LOLOS" },
+            { no: 49, nis: "25400", name: "Fadhiana Putri Latifa", class: "X-7", status: "LOLOS" },
+            { no: 50, nis: "25405", name: "Maulana Hafidz Afifudin", class: "X-7", status: "LOLOS" },
+            { no: 51, nis: "25408", name: "Mizanul Fikri Al Afgani", class: "X-7", status: "TIDAK LOLOS" },
+            { no: 52, nis: "25427", name: "Aqila Ath Thahira Zahra", class: "X-8", status: "TIDAK LOLOS" },
+            { no: 53, nis: "25431", name: "Aufar Briihan Ebrahimi", class: "X-8", status: "LOLOS" },
+            { no: 54, nis: "25433", name: "Dzaky Fadilatur Rohman", class: "X-8", status: "TIDAK LOLOS" },
+            { no: 55, nis: "25440", name: "Intan Aprilia Dewi", class: "X-8", status: "TIDAK LOLOS" },
+            { no: 56, nis: "25442", name: "Isya Patih Romadhon", class: "X-8", status: "TIDAK LOLOS" },
+            { no: 57, nis: "25445", name: "Labib Noval Apriliano", class: "X-8", status: "TIDAK LOLOS" },
+            { no: 58, nis: "25450", name: "Renaisans Vedanada", class: "X-8", status: "TIDAK LOLOS" },
+            { no: 59, nis: "25457", name: "Anissa Oktafiana Putri", class: "X-9", status: "TIDAK LOLOS" },
+            { no: 60, nis: "25465", name: "Delicia Taffy Fitrian", class: "X-9", status: "TIDAK LOLOS" },
+            { no: 61, nis: "25469", name: "Haidar Al Aziia", class: "X-9", status: "TIDAK LOLOS" },
+            { no: 62, nis: "25474", name: "Khonsa Tsabita Khoirunnisa", class: "X-9", status: "LOLOS" },
+            { no: 63, nis: "25481", name: "Nurlita", class: "X-9", status: "TIDAK LOLOS" },
+            { no: 64, nis: "25491", name: "Vanessa Angelina", class: "X-9", status: "TIDAK LOLOS" },
+            { no: 65, nis: "25492", name: "Vendri Yumna", class: "X-9", status: "LOLOS" },
+            { no: 66, nis: "25494", name: "Aira Mezzaluna Mustofa", class: "X-10", status: "LOLOS" },
+            { no: 67, nis: "25496", name: "Alyaa Najla Azaitun", class: "X-10", status: "TIDAK LOLOS" },
+            { no: 68, nis: "25498", name: "Athaya Yumna Quinnsya", class: "X-10", status: "TIDAK LOLOS" },
+            { no: 69, nis: "25504", name: "Cressa Alia Nugroho", class: "X-10", status: "LOLOS" },
+            { no: 70, nis: "25523", name: "Riana Puspitasari", class: "X-10", status: "TIDAK LOLOS" },
+            { no: 71, nis: "25527", name: "Zyzy Kanaya Ayu Putri", class: "X-10", status: "TIDAK LOLOS" },
+            { no: 72, nis: "25538", name: "Dalilah Salsabila Claresta", class: "X-11", status: "LOLOS" },
+            { no: 73, nis: "25540", name: "Elvina Nadia Putri", class: "X-11", status: "TIDAK LOLOS" },
+            { no: 74, nis: "25541", name: "Hans Arkana Faishal Afif", class: "X-11", status: "LOLOS" },
+            { no: 75, nis: "25542", name: "Helena Trisha Briliantin", class: "X-11", status: "TIDAK LOLOS" },
+            { no: 76, nis: "25543", name: "Hibatullah Al Musyaffa Adiputra", class: "X-11", status: "TIDAK LOLOS" },
+            { no: 77, nis: "25551", name: "Meysila Pristan Esya", class: "X-11", status: "LOLOS" },
+            { no: 78, nis: "25554", name: "Muthia Salma", class: "X-11", status: "TIDAK LOLOS" },
+            { no: 79, nis: "25563", name: "Yessi Yuaniar Damarani", class: "X-11", status: "TIDAK LOLOS" }
+        ];
+
+        // Fungsi untuk mengisi tabel dengan data siswa (tanpa status)
+        function populateStudentTable() {
+            const tableBody = document.querySelector('#studentsTable tbody');
+            
+            studentData.forEach((student) => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${student.no}</td>
+                    <td>${student.nis || '-'}</td>
+                    <td>${student.name}</td>
+                    <td>${student.class}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+
+        mobileMenuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            
+            // Mengubah ikon hamburger menjadi X ketika menu aktif
+            if (navMenu.classList.contains('active')) {
+                this.innerHTML = '✕';
+            } else {
+                this.innerHTML = '☰';
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                navMenu.classList.remove('active');
+                mobileMenuToggle.innerHTML = '☰';
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mengisi tabel data siswa saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', populateStudentTable);
+    </script>
+</body>
+</html>

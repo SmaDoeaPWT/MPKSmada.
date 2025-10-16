@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemilihan Kandidat - MPK SMADA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        /* Header & Navigation */
+        .header {
+            background: rgb(110, 1, 1);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            display: flex;
+        }
+
+        .logo img {
+            border-radius: 50%;
+        }
+
+        .header.scrolled .logo {
+            color: #2c3e50;
+            text-shadow: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .header.scrolled .nav-link {
+            color: #2c3e50;
+            text-shadow: none;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #ffffff, #e74c3c);
+            transition: width 0.3s ease;
+        }
+
+        .header.scrolled .nav-link::after {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: #e74c3c;
+            transform: translateY(-2px);
+        }
+
+        .header.scrolled .nav-link:hover {
+            color: #3498db;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled .mobile-menu-toggle {
+            color: #dd463c;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 120px 0 60px;
+            text-align: center;
+            background: linear-gradient(135deg, #5f010d, #781f19);
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            border-radius: 2px;
+        }
+
+        /* Candidates Section */
+        .candidates-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .candidate-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .candidate-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 4px solid #e74c3c;
+        }
+
+        .candidate-info {
+            padding: 1.5rem;
+        }
+
+        .candidate-number {
+            display: inline-block;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .candidate-name {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .candidate-class {
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+        }
+
+        .candidate-vision {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .btn-vote {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-vote:hover {
+            background: linear-gradient(45deg, #2980b9, #1f6399);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        /* Results Section */
+        .results-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .result-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-bar-container {
+            height: 30px;
+            background: #ecf0f1;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .result-bar {
+            height: 100%;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            border-radius: 15px;
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Popup Konfirmasi dengan Background Gambar */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .popup-content {
+            background: white; /* Fallback jika gambar tidak dimuat */
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: popupAppear 0.4s ease;
+            position: relative;
+        }
+
+        /* Background gambar untuk popup konfirmasi */
+        .popup-content.confirmation-popup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('Image/WEBSITE.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 100%; /* Sesuaikan opacity sesuai kebutuhan */
+            z-index: 1;
+        }
+
+        /* Popup sukses dengan background putih */
+        .popup-content.success-popup-content {
+            background: white;
+        }
+
+        .popup-content.success-popup-content::before {
+            display: none; /* Hilangkan background gambar untuk popup sukses */
+        }
+
+        .popup-header,
+        .popup-body {
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes popupAppear {
+            from { opacity: 0; transform: scale(0.8) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .popup-header {
+            background: linear-gradient(135deg, #5f010d, #781f19);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .popup-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .popup-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .popup-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .popup-body {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .popup-candidate {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .popup-candidate img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1.5rem;
+            border: 3px solid #e74c3c;
+        }
+
+        .popup-candidate-info h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+        }
+
+        .popup-candidate-info p {
+            color: #666;
+            font-style: italic;
+        }
+
+        .popup-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: #856404;
+        }
+
+        .popup-warning p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .popup-btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            min-width: 120px;
+        }
+
+        .popup-cancel {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .popup-cancel:hover {
+            background: #d5dbdb;
+            transform: translateY(-2px);
+        }
+
+        .popup-submit {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .popup-submit:hover {
+            background: linear-gradient(45deg, #27ae60, #219653);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+        }
+
+        /* Success Popup */
+        .success-popup {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #2ecc71;
+            margin-bottom: 1rem;
+        }
+
+        .success-popup h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .success-popup p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        /* Countdown Styles */
+        .countdown-container {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+
+        .countdown-text {
+            font-size: 1rem;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        .countdown-timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2001;
+            display: none;
+            opacity: 1;
+            transition: opacity 2s ease-out;
+        }
+
+        #confetti-canvas.fade-out {
+            opacity: 0;
+        }
+
+        /* Explosion Effect */
+        .explosion-effect {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            z-index: 2003;
+            display: none;
+            animation: explosion 0.5s ease-out forwards;
+        }
+
+        @keyframes explosion {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(8);
+                opacity: 0;
+            }
+        }
+
+        /* Loading Indicator */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            color: #666;
+        }
+
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Status Indicator */
+        .status-indicator {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin: 1rem auto;
+            text-align: center;
+            max-width: 300px;
+        }
+        
+        .status-online {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-offline {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .last-update {
+            font-size: 0.8rem;
+            color: #666;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgb(110, 1, 1);
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: #3498db;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .footer-section a:hover {
+            color: #3498db;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #34495e;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            text-align: center;
+            color: #bdc3c7;
+            width: 100%;
+        }
+
+        .footer-bottom button {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .footer-bottom button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            /* Navigation */
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                padding-top: 2rem;
+                transition: left 0.3s ease;
+                border-top: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-menu .nav-link {
+                color: #2c3e50;
+                text-shadow: none;
+                font-size: 1.2rem;
+                padding: 1rem 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            /* Page Header */
+            .page-header {
+                padding: 6rem 0 3rem;
+            }
+
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            /* Candidates Section */
+            .candidates-container {
+                grid-template-columns: 1fr;
+            }
+
+            /* Popup */
+            .popup-buttons {
+                flex-direction: column;
+            }
+
+            .popup-btn {
+                width: 100%;
+            }
+
+            .popup-candidate {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .popup-candidate img {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            /* Footer */
+            .footer {
+                padding: 2rem 0 1rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-bottom button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                padding: 0.8rem 1rem;
+            }
+            
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .candidate-card {
+                margin: 0 1rem;
+            }
+            
+            .results-container {
+                padding: 1rem;
+            }
+            
+            .popup-content {
+                width: 95%;
+            }
+            
+            .popup-header {
+                padding: 1.5rem;
+            }
+            
+            .popup-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas untuk efek confetti -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Efek Explosion -->
+    <div class="explosion-effect" id="explosionEffect"></div>
+
+    <!-- Loading Indicator -->
+    <div class="loading" id="loadingIndicator">
+        <div class="loading-spinner"></div>
+        <p>Menyimpan data ke server...</p>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo-container">
+                <a href="#" class="logo"><img src="Image/Sman2.png" width="50px" height="50px" style="border-radius: 50%"></a>
+                <a href="#" class="logo"><img src="Image/MPK2.png" width="55px" height="51px" style="border-radius: 50%"></a>
+            </div>
+            <nav> 
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="Beranda.html" class="nav-link">Beranda</a></li>
+                    <li><a href="Tentang Kami.html" class="nav-link">Tentang Kami</a></li>
+                    <li><a href="Informasi.html" class="nav-link">Informasi</a></li>
+                    <li><a href="Pengumuman.html" class="nav-link">Pengumuman</a></li>
+                    <li><a href="PILKAOS.html" class="nav-link">Pemilihan</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle">☰</button>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Tentukan Pahlawan Versi Anda</h1>
+            <p>suara anda, kekuatan mereka!</p>
+        </div>
+    </section>
+
+    <!-- Status Indicator -->
+    <div id="statusIndicator" class="status-indicator status-online" style="display: none;">
+        🔄 Memuat data terbaru...
+    </div>
+
+    <!-- Candidates Section -->
+    <section class="section" id="candidates">
+        <h2 class="section-title">KANDIDAT KETUA OSIS</h2>
+        <div class="candidates-container">
+            <!-- Candidate 1 -->
+            <div class="candidate-card">
+                <img src="Image/Revan.jpg" alt="Calon 1" class="candidate-img">
+                <div class="candidate-info">
+                    <div class="candidate-number">1</div>
+                    <h3 class="candidate-name">Revandhika Reswara Kurnia</h3>
+                    <p class="candidate-vision">"Mewujudkan sekolah yang inovatif dan berprestasi"</p>
+                    <button class="btn-vote" onclick="selectCandidate(1)">PILIH</button>
+                </div>
+            </div>
+            
+            <!-- Candidate 2 -->
+            <div class="candidate-card">
+                <img src="Image/Calista.jpg" alt="Calon 2" class="candidate-img">
+                <div class="candidate-info">
+                    <div class="candidate-number">2</div>
+                    <h3 class="candidate-name">Calista Almira Dilistiani</h3>
+                    <p class="candidate-vision">"<p class="candidate-vision">"VISI:<br>Mewujudkan OSIS SMA Negeri 2 Purwokerto sebagai wadah yang menumbuhkan kepemimpinan, budaya, dan kontribusi nyata berdasarkan nilai SINAR (Solidaritas, Inovasi, Nasionalisme, Apresiasi, Religius.c<br>MISI:<br>1. Menumbuhkan religiusitas dan solidaritas siswa-siswi SMA Negeri 2 Purwokerto<br>2. Mengembangkan kreativitas dan inovasi<br>3. Menjadi wadah apresiasi yang inklusif bagi siswa-siswi SMA Negeri 2 Purwokerto<br>PROGRAM KERJA:<br>SMADA FUTURE FESTIVAL (F2)<br>Wadah yang menggabungkan inspirasi, inovasi, dan apresiasi karya siswa untuk memperluas wawasan dalam bidang STEM.<br>FESTIVAL BUDAYA SMADA<br>Bertujuan melestarikan ragam budaya nusantara dan mancanegara melalui kegiatan partisipatif yang edukatif.<br>"</p>"</p>
+                    <button class="btn-vote" onclick="selectCandidate(2)">PILIH</button>
+                </div>
+            </div>
+            
+            <!-- Candidate 3 -->
+            <div class="candidate-card">
+                <img src="Image/Egi.jpg" alt="Calon 3" class="candidate-img">
+                <div class="candidate-info">
+                    <div class="candidate-number">3</div>
+                    <h3 class="candidate-name">Egi Setiawan</h3>
+                    <p class="candidate-vision">"VISI:<br>Menjadikan OSIS sebagai agen pendorong atau wadah untuk mewujudkan generasi yang "Cemerlang", yaitu generasi yang Cerdas, Beriman, Terampil, Kreatif, Inovatif, dan Peduli Lingkungan<br>MISI:<br>1. Penanaman nilai-nilai keimanan, ketaqwaan, dan budaya sopan santun dalam diri siswa-siswi SMA Negeri 2 Purwokerto<br>2. Mengembangkan kecerdasan, keterampilan, kreativitas, dan daya inovasi siswa-siswi SMA Negeri 2 Purwokerto<br>3. Peningkatan semangat peduli dan rasa cinta terhadap lingkungan dalam diri siswa-siwi SMA Negeri 2 Purwokerto<br>PROGJA:<br>SECTRA (Smada Education, Creativity, and Inspiration Arena)<br>Sebuah event yang menjadi puncak dari kegiatan classmeeting hari Bumi dan hari Kartini"</p>
+                    <button class="btn-vote" onclick="selectCandidate(3)">PILIH</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="section" id="results">
+        <h2 class="section-title">HASIL SEMENTARA</h2>
+        <div class="results-container">
+            <div class="loading" id="resultsLoading">
+                <div class="loading-spinner"></div>
+                <p>Memuat hasil pemilihan...</p>
+            </div>
+            
+            <!-- Refresh Button -->
+            <div style="text-align: center; margin-bottom: 1rem;">
+                <button onclick="forceRefreshResults()" style="padding: 0.5rem 1rem; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    🔄 Refresh Hasil
+                </button>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-header">
+                    <span>Revandhika Reswara Kurnia</span>
+                    <span id="voteCount1">0</span> suara
+                </div>
+                <div class="result-bar-container">
+                    <div class="result-bar" id="voteBar1" style="width: 0%">0%</div>
+                </div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-header">
+                    <span>Calista Almira Dilistiani</span>
+                    <span id="voteCount2">0</span> suara
+                </div>
+                <div class="result-bar-container">
+                    <div class="result-bar" id="voteBar2" style="width: 0%">0%</div>
+                </div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-header">
+                    <span>Egi Setiawan</span>
+                    <span id="voteCount3">0</span> suara
+                </div>
+                <div class="result-bar-container">
+                    <div class="result-bar" id="voteBar3" style="width: 0%">0%</div>
+                </div>
+            </div>
+            
+            <div class="last-update" id="lastUpdate">
+                Terakhir diperbarui: <span id="updateTime">-</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popup Konfirmasi dengan Background Gambar -->
+    <div class="popup-overlay" id="confirmationPopup">
+        <div class="popup-content confirmation-popup">
+            <div class="popup-header">
+                <button class="popup-close" onclick="closeConfirmationPopup()">×</button>
+                <h2>Nawasena Arutala</h2>
+            </div>
+            <div class="popup-body">
+                <div class="popup-candidate" id="popupCandidate">
+                    <img id="popupImg" src="" alt="Kandidat Terpilih">
+                    <div class="popup-candidate-info">
+                        <h3 id="popupName">Nama Kandidat</h3>
+                        <p id="popupVision">Visi Kandidat</p>
+                    </div>
+                </div>
+                
+                <div class="popup-warning">
+                    <p>⚠️ Data tidak dapat diubah setelah dikirim. Harap periksa kembali sebelum mengirim.</p>
+                </div>
+                
+                <div class="popup-buttons">
+                    <button class="popup-btn popup-cancel" onclick="closeConfirmationPopup()">Batal</button>
+                    <button class="popup-btn popup-submit" onclick="submitVote()">Ya, Saya Yakin</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Sukses dengan Background Putih -->
+    <div class="popup-overlay" id="successPopup">
+        <div class="popup-content success-popup-content">
+            <div class="popup-body success-popup">
+                <div class="success-icon">✓</div>
+                <h2>Terima Kasih</h2>
+                <p>Pilihan tercatat! Partisipasi Anda jadi bahan bakar perubahan positif di sekolah.</p>
+                <div class="countdown-container">
+                    <p class="countdown-text">Halaman akan kembali ke beranda dalam:</p>
+                    <div class="countdown-timer" id="countdownTimer">10 detik</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <button onclick="document.location='https://www.instagram.com/mpksmadapwt/'">@mpksmadapwt</button>
+        </div>
+    </footer>
+
+    <script>
+        // ==============================
+        // KONFIGURASI GITHUB API
+        // ==============================
+        const GITHUB_CONFIG = {
+            owner: 'SmaDoeaPWT',
+            repo: 'MPK-Smada',
+            token: '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',
+            baseURL: 'https://api.github.com'
+        };
+
+        // ==============================
+        // CLASS GITHUB API
+        // ==============================
+        class GitHubAPI {
+            constructor(config) {
+                this.owner = config.owner;
+                this.repo = config.repo;
+                this.token = config.token;
+                this.baseURL = config.baseURL;
+                this.cacheBuster = Date.now();
+            }
+
+            // Helper untuk handle request dengan cache busting
+            async makeGitHubRequest(url, options = {}) {
+                const fullUrl = `${url}?t=${this.cacheBuster}`;
+                
+                const defaultOptions = {
+                    headers: {
+                        'Authorization': `token ${this.token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                };
+
+                const mergedOptions = { ...defaultOptions, ...options };
+                
+                try {
+                    const response = await fetch(fullUrl, mergedOptions);
+                    
+                    // Handle rate limiting
+                    if (response.status === 403) {
+                        const resetTime = response.headers.get('X-RateLimit-Reset');
+                        if (resetTime) {
+                            const waitTime = (resetTime * 1000) - Date.now();
+                            console.warn(`⏳ Rate limit exceeded. Waiting ${Math.ceil(waitTime/1000)} seconds`);
+                            await new Promise(resolve => setTimeout(resolve, waitTime + 1000));
+                            return this.makeGitHubRequest(url, options);
+                        }
+                    }
+                    
+                    return response;
+                } catch (error) {
+                    console.error('❌ Network error:', error);
+                    throw error;
+                }
+            }
+
+            // Simpan data voting ke GitHub
+            async saveVoteData(voteData) {
+                try {
+                    const uniqueId = Math.random().toString(36).substr(2, 9);
+                    const filename = `vote-${voteData.candidateId}-${Date.now()}-${uniqueId}.json`;
+                    
+                    const content = btoa(unescape(encodeURIComponent(JSON.stringify(voteData, null, 2))));
+                    
+                    const response = await this.makeGitHubRequest(
+                        `${this.baseURL}/repos/${this.owner}/${this.repo}/contents/data/${filename}`,
+                        {
+                            method: 'PUT',
+                            body: JSON.stringify({
+                                message: `Vote for candidate ${voteData.candidateId} - ${new Date().toLocaleString()}`,
+                                content: content,
+                                branch: 'main'
+                            })
+                        }
+                    );
+
+                    if (response.status === 201) {
+                        console.log('✅ Data voting berhasil disimpan ke GitHub');
+                        this.cacheBuster = Date.now();
+                        return true;
+                    } else {
+                        const errorData = await response.json();
+                        console.error('❌ Gagal menyimpan data ke GitHub:', errorData);
+                        return false;
+                    }
+                } catch (error) {
+                    console.error('❌ Error menyimpan data ke GitHub:', error);
+                    return false;
+                }
+            }
+
+            // Ambil semua data voting
+            async getAllVotes() {
+                try {
+                    const response = await this.makeGitHubRequest(
+                        `${this.baseURL}/repos/${this.owner}/${this.repo}/contents/data`
+                    );
+
+                    if (response.status === 200) {
+                        const files = await response.json();
+                        const votes = [];
+                        const filePromises = [];
+
+                        for (const file of files) {
+                            if (file.name.endsWith('.json') && file.type === 'file') {
+                                filePromises.push(
+                                    this.processVoteFile(file.download_url)
+                                );
+                            }
+                        }
+
+                        const results = await Promise.allSettled(filePromises);
+                        
+                        results.forEach(result => {
+                            if (result.status === 'fulfilled' && result.value) {
+                                votes.push(result.value);
+                            }
+                        });
+
+                        console.log(`✅ Loaded ${votes.length} votes from GitHub`);
+                        return votes;
+                    } else if (response.status === 404) {
+                        console.log('📁 Folder data belum ada, akan dibuat otomatis');
+                        return [];
+                    } else {
+                        console.error('❌ Gagal mengambil data dari GitHub:', response.status);
+                        return [];
+                    }
+                } catch (error) {
+                    console.error('❌ Error mengambil data dari GitHub:', error);
+                    return [];
+                }
+            }
+
+            // Process individual vote file
+            async processVoteFile(downloadUrl) {
+                try {
+                    const response = await fetch(`${downloadUrl}?t=${this.cacheBuster}`);
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                } catch (error) {
+                    console.warn('⚠️ Gagal memuat file:', downloadUrl, error);
+                }
+                return null;
+            }
+
+            // Hitung total votes dari GitHub
+            async calculateVotesFromGitHub() {
+                const votes = await this.getAllVotes();
+                const voteCount = { candidate1: 0, candidate2: 0, candidate3: 0 };
+
+                votes.forEach(vote => {
+                    if (vote.candidateId === 1) voteCount.candidate1++;
+                    else if (vote.candidateId === 2) voteCount.candidate2++;
+                    else if (vote.candidateId === 3) voteCount.candidate3++;
+                });
+
+                console.log('📊 Vote counts:', voteCount);
+                return voteCount;
+            }
+
+            // Test koneksi ke GitHub
+            async testConnection() {
+                try {
+                    const response = await this.makeGitHubRequest(
+                        `${this.baseURL}/repos/${this.owner}/${this.repo}`
+                    );
+                    return response.status === 200;
+                } catch (error) {
+                    console.error('❌ Koneksi GitHub gagal:', error);
+                    return false;
+                }
+            }
+        }
+
+        // ==============================
+        // INISIALISASI APLIKASI
+        // ==============================
+        
+        const candidates = {
+            1: { name: "Revandhika Reswara Kurnia", votes: 0, img: "Image/Revan.jpg"},
+            2: { name: "Calista Almira Dilistiani", votes: 0, img: "Image/Calista.jpg"},
+            3: { name: "Egi Setiawan", votes: 0, img: "Image/Egi.jpg"}
+        };
+        
+        let selectedCandidateId = null;
+        let countdownInterval = null;
+        let confettiAnimationId = null;
+        let confettiParticles = [];
+        let lastUpdateTime = null;
+        
+        // Buat instance GitHub API
+        const githubAPI = new GitHubAPI(GITHUB_CONFIG);
+
+        // ==============================
+        // FUNGSI UTAMA
+        // ==============================
+
+        // Update status indicator
+        function updateStatus(message, type = 'online') {
+            const indicator = document.getElementById('statusIndicator');
+            indicator.textContent = message;
+            indicator.className = `status-indicator status-${type}`;
+            indicator.style.display = 'block';
+            
+            setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 5000);
+        }
+
+        // Force refresh results
+        async function forceRefreshResults() {
+            updateStatus('🔄 Memuat data terbaru...', 'online');
+            githubAPI.cacheBuster = Date.now();
+            await updateResults();
+        }
+
+        // Update last update time
+        function updateLastUpdateTime() {
+            lastUpdateTime = new Date();
+            const timeString = lastUpdateTime.toLocaleTimeString('id-ID');
+            document.getElementById('updateTime').textContent = timeString;
+        }
+
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+
+        mobileMenuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Fungsi untuk memilih kandidat
+        function selectCandidate(candidateId) {
+            selectedCandidateId = candidateId;
+            const candidate = candidates[candidateId];
+            
+            document.getElementById('popupImg').src = candidate.img;
+            document.getElementById('popupName').textContent = candidate.name;
+            document.getElementById('popupVision').textContent = candidate.vision;
+            document.getElementById('confirmationPopup').style.display = 'flex';
+        }
+        
+        // Tutup popup konfirmasi
+        function closeConfirmationPopup() {
+            document.getElementById('confirmationPopup').style.display = 'none';
+            selectedCandidateId = null;
+        }
+        
+        // Submit suara dengan GitHub API
+        async function submitVote() {
+            if (!selectedCandidateId) return;
+            
+            document.getElementById('loadingIndicator').style.display = 'block';
+            updateStatus('📤 Mengirim data vote...', 'online');
+            
+            try {
+                // Test koneksi dulu
+                const isConnected = await githubAPI.testConnection();
+                if (!isConnected) {
+                    throw new Error('Tidak dapat terhubung ke GitHub');
+                }
+
+                const voteData = {
+                    candidateId: selectedCandidateId,
+                    candidateName: candidates[selectedCandidateId].name,
+                    timestamp: new Date().toISOString(),
+                    userAgent: navigator.userAgent.substring(0, 100),
+                    screenResolution: `${screen.width}x${screen.height}`,
+                    language: navigator.language,
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    deviceId: localStorage.getItem('deviceId') || generateDeviceId()
+                };
+
+                // Generate device ID jika belum ada
+                if (!localStorage.getItem('deviceId')) {
+                    localStorage.setItem('deviceId', voteData.deviceId);
+                }
+
+                // Simpan ke GitHub
+                const githubSuccess = await githubAPI.saveVoteData(voteData);
+                
+                if (githubSuccess) {
+                    updateStatus('✅ Vote berhasil disimpan!', 'online');
+                    
+                    // Refresh results setelah vote
+                    setTimeout(async () => {
+                        await updateResults();
+                    }, 1000);
+                    
+                } else {
+                    updateStatus('❌ Gagal menyimpan vote', 'offline');
+                    throw new Error('Gagal menyimpan ke GitHub');
+                }
+
+                closeConfirmationPopup();
+                document.getElementById('successPopup').style.display = 'flex';
+                startBombConfetti();
+                startCountdown();
+                
+            } catch (error) {
+                console.error('❌ Error dalam submit vote:', error);
+                updateStatus('❌ Gagal menyimpan vote', 'offline');
+                alert('Terjadi kesalahan saat menyimpan vote. Silakan coba lagi.');
+            } finally {
+                document.getElementById('loadingIndicator').style.display = 'none';
+            }
+        }
+
+        // Generate unique device ID
+        function generateDeviceId() {
+            return 'device-' + Math.random().toString(36).substr(2, 9) + '-' + Date.now().toString(36);
+        }
+
+        // Update hasil pemilihan
+        async function updateResults() {
+            try {
+                document.getElementById('resultsLoading').style.display = 'block';
+                updateStatus('📊 Memuat hasil terbaru...', 'online');
+                
+                const githubVotes = await githubAPI.calculateVotesFromGitHub();
+                console.log('✅ Data dari GitHub:', githubVotes);
+
+                // Update candidates data dari GitHub
+                candidates[1].votes = githubVotes.candidate1;
+                candidates[2].votes = githubVotes.candidate2;
+                candidates[3].votes = githubVotes.candidate3;
+
+                const totalVotes = githubVotes.candidate1 + githubVotes.candidate2 + githubVotes.candidate3;
+                
+                // Update UI
+                for (let i = 1; i <= 3; i++) {
+                    const candidate = candidates[i];
+                    const percentage = totalVotes > 0 ? Math.round((candidate.votes / totalVotes) * 100) : 0;
+                    
+                    document.getElementById(`voteCount${i}`).textContent = candidate.votes;
+                    document.getElementById(`voteBar${i}`).style.width = `${percentage}%`;
+                    document.getElementById(`voteBar${i}`).textContent = `${percentage}%`;
+                }
+                
+                updateLastUpdateTime();
+                updateStatus(`✅ Data terbaru loaded - Total: ${totalVotes} votes`, 'online');
+                
+            } catch (error) {
+                console.error('❌ Error updating results:', error);
+                updateStatus('❌ Gagal memuat data', 'offline');
+                
+                // Reset ke 0 jika gagal load data
+                for (let i = 1; i <= 3; i++) {
+                    document.getElementById(`voteCount${i}`).textContent = '0';
+                    document.getElementById(`voteBar${i}`).style.width = '0%';
+                    document.getElementById(`voteBar${i}`).textContent = '0%';
+                }
+                
+                updateLastUpdateTime();
+            } finally {
+                document.getElementById('resultsLoading').style.display = 'none';
+            }
+        }
+
+        // Fungsi untuk efek bom confetti yang langsung meledak
+        function startBombConfetti() {
+            const explosionEffect = document.getElementById('explosionEffect');
+            explosionEffect.style.display = 'block';
+            
+            setTimeout(() => {
+                explosionEffect.style.display = 'none';
+                startConfettiExplosion();
+            }, 500);
+        }
+        
+        // Fungsi untuk confetti explosion
+        function startConfettiExplosion() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            canvas.style.display = 'block';
+            canvas.classList.remove('fade-out');
+            
+            confettiParticles = [];
+            const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f1c40f', '#9b59b6', '#1abc9c', '#e67e22', '#FF6B00', '#FFD700', '#FF4081'];
+            
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            for (let i = 0; i < 400; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 15 + 5;
+                const velocityX = Math.cos(angle) * speed;
+                const velocityY = Math.sin(angle) * speed;
+                
+                confettiParticles.push({
+                    x: centerX,
+                    y: centerY,
+                    size: Math.random() * 15 + 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    velocityX: velocityX,
+                    velocityY: velocityY,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: Math.random() * 10 - 5,
+                    opacity: 1,
+                    gravity: 0.3,
+                    resistance: 0.98,
+                    fadeSpeed: Math.random() * 0.01 + 0.005,
+                    shape: Math.random() > 0.3 ? 'rect' : 'circle',
+                    wobble: Math.random() * 2 - 1,
+                    wobbleSpeed: Math.random() * 0.1 + 0.05,
+                    life: 1
+                });
+            }
+            
+            let startTime = Date.now();
+            const duration = 6000;
+            
+            function animateConfetti() {
+                const currentTime = Date.now();
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                let activeParticles = 0;
+                
+                confettiParticles.forEach(particle => {
+                    particle.velocityY += particle.gravity;
+                    particle.velocityX *= particle.resistance;
+                    particle.velocityY *= particle.resistance;
+                    
+                    particle.x += particle.velocityX;
+                    particle.y += particle.velocityY;
+                    particle.rotation += particle.rotationSpeed;
+                    particle.wobble = Math.sin(particle.rotation * particle.wobbleSpeed) * 2;
+                    
+                    if (progress > 0.5) {
+                        particle.life = Math.max(0, particle.life - particle.fadeSpeed);
+                    }
+                    
+                    ctx.save();
+                    ctx.translate(particle.x, particle.y);
+                    ctx.rotate(particle.rotation * Math.PI / 180);
+                    ctx.globalAlpha = particle.life;
+                    ctx.fillStyle = particle.color;
+                    
+                    if (particle.shape === 'circle') {
+                        ctx.beginPath();
+                        ctx.arc(0, 0, particle.size / 2, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else {
+                        const width = particle.size;
+                        const height = particle.size * (0.5 + Math.random() * 0.5);
+                        ctx.fillRect(-width / 2, -height / 2, width, height);
+                    }
+                    
+                    ctx.restore();
+                    
+                    if (particle.y < canvas.height && particle.life > 0) {
+                        activeParticles++;
+                    }
+                });
+                
+                if (activeParticles > 0 || progress < 0.8) {
+                    confettiAnimationId = requestAnimationFrame(animateConfetti);
+                } else {
+                    canvas.classList.add('fade-out');
+                    setTimeout(() => {
+                        canvas.style.display = 'none';
+                        if (confettiAnimationId) {
+                            cancelAnimationFrame(confettiAnimationId);
+                        }
+                    }, 2000);
+                }
+            }
+            
+            animateConfetti();
+        }
+        
+        // Fungsi untuk memulai countdown
+        function startCountdown() {
+            let countdown = 10;
+            const countdownTimer = document.getElementById('countdownTimer');
+            
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            countdownInterval = setInterval(function() {
+                countdown--;
+                countdownTimer.textContent = `${countdown} detik`;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    closeSuccessPopup();
+                }
+            }, 1000);
+        }
+        
+        // Tutup popup sukses
+        function closeSuccessPopup() {
+            document.getElementById('successPopup').style.display = 'none';
+            
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            if (confettiAnimationId) {
+                cancelAnimationFrame(confettiAnimationId);
+            }
+            
+            window.location.href = 'PILKAOS.html';
+        }
+        
+        // Inisialisasi saat halaman dimuat
+        window.onload = async function() {
+            // Generate device ID jika belum ada
+            if (!localStorage.getItem('deviceId')) {
+                localStorage.setItem('deviceId', generateDeviceId());
+            }
+            
+            console.log('Device ID:', localStorage.getItem('deviceId'));
+            
+            // Load data awal
+            await updateResults();
+            
+            // Auto-refresh results every 15 seconds
+            setInterval(updateResults, 15000);
+            
+            // Juga refresh ketika tab menjadi active
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    updateResults();
+                }
+            });
+
+            // Handle resize window
+            window.addEventListener('resize', function() {
+                const canvas = document.getElementById('confetti-canvas');
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        };
+    </script>
+</body>
+</html>
